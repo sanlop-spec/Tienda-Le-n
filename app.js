@@ -241,7 +241,8 @@ document.getElementById("cartOverlay").addEventListener("click", closeCart);
 /* ---------- 6. CHECKOUT VÍA WHATSAPP ---------- */
 function buildWhatsAppMessage() {
   const lines = cart.map(item => `- ${item.cantidad}x ${item.titulo} (Talla ${item.talla})`);
-  return `¡Hola, Tienda León! Me interesa dominar mi estilo con el siguiente pedido:\n${lines.join("\n")}\n¿Tienen disponibilidad para coordinar el pago?`;
+  // Cambiado a ¡Hola, León Vintage!
+  return `¡Hola, León Vintage! Me interesa dominar mi estilo con el siguiente pedido:\n${lines.join("\n")}\n¿Tienen disponibilidad para coordinar el pago?`;
 }
 
 document.getElementById("checkoutBtn").addEventListener("click", () => {
