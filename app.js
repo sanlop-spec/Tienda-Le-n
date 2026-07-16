@@ -292,36 +292,59 @@ document.getElementById("productGrid").addEventListener("click", (e) => {
     const src = clickedImg.getAttribute("src");
     const alt = clickedImg.getAttribute("alt");
     
-    // Si la imagen no es el placeholder de error, la abrimos en grande
-    if (src && !src.includes("placehold.co")) {
-      modalImg.src = src;
-      modalImg.alt = alt || "León Vintage";
-      imageModal.classList.add("active");
-      document.body.classList.add("overflow-hidden"); // Evita que la página de atrás se mueva
-    }
-  }
-});
+    /* ---------- VISTA PREVIA DE IMAGEN (MODAL) ---------- */
+const imageModal = document.getElementById("imageModal");
+const modalImg = document.getElementById("modalImg");
+const closeModalBtn = document.getElementById("closeModalBtn");
 
-// 2. Función para cerrar el modal
-function closeImageModal() {
-  imageModal.classList.remove("active");
-  document.body.classList.remove("overflow-hidden");
-  setTimeout(() => {
-    modalImg.src = ""; // Limpiamos la imagen al cerrar
-  }, 300);
+// Aseguramos que escuche el clic en todo el contenedor de productos
+const productGrid = document.getElementById("productGrid");
+if (productGrid) {
+  productGrid.addEventListener("click", (e) => {
+    // Buscamos si el elemento clickeado es una imagen dentro de la tarjeta
+    const clickedImg = e.target.closest(".product-card__img-wrap img") || e.target.closest("article img");
+    
+    if (clickedImg) {
+      e.preventDefault(); // Evitamos cualquier acción por defecto
+      const src = clickedImg.getAttribute("src");
+      const alt = clickedImg.getAttribute("alt");
+      
+      // Abrimos en grande siempre que no sea la imagen de error por defecto
+      if (src && !src.includes("placehold.co")) {
+        modalImg.src = src;
+        modalImg.alt = alt || "León Vintage";
+        imageModal.classList.add("active");
+        document.body.classList.add("overflow-hidden"); // Bloquea el scroll de fondo
+      }
+    }
+  });
 }
 
-// Cerrar al dar clic en la tacha o en el fondo negro
-closeModalBtn.addEventListener("click", closeImageModal);
-imageModal.addEventListener("click", (e) => {
-  if (e.target === imageModal) {
-    closeImageModal();
+// Función para cerrar el modal
+function closeImageModal() {
+  if (imageModal) {
+    imageModal.classList.remove("active");
+    document.body.classList.remove("overflow-hidden");
+    setTimeout(() => {
+      modalImg.src = ""; 
+    }, 300);
   }
-});
+}
 
-// Cerrar presionando la tecla "Escape"
+// Eventos para cerrar
+if (closeModalBtn) {
+  closeModalBtn.addEventListener("click", closeImageModal);
+}
+if (imageModal) {
+  imageModal.addEventListener("click", (e) => {
+    if (e.target === imageModal) {
+      closeImageModal();
+    }
+  });
+}
+
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && imageModal.classList.contains("active")) {
+  if (e.key === "Escape" && imageModal && imageModal.classList.contains("active")) {
     closeImageModal();
   }
 });
